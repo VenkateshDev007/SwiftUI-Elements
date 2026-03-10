@@ -1,5 +1,6 @@
 //
 //  ReusableButton.swift
+//  SwiftElements
 //
 //  Created by Polepalli, Venkatesh on 06/02/26.
 //
@@ -55,17 +56,6 @@ public struct ReusableButton<Label: View>: View {
         case .secondary:
             Button(action: action) { label }
                 .buttonStyle(.bordered)
-        }
-    }
-}
-
-private extension View {
-    @ViewBuilder
-    func reusableAccessibilityIdentifier(_ id: String?) -> some View {
-        if let id {
-            accessibilityIdentifier(id)
-        } else {
-            self
         }
     }
 }
