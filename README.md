@@ -1,11 +1,11 @@
 [README.md](https://github.com/user-attachments/files/25839781/README.md)
-## MyLibrary
+## SwiftElements
 
-`MyLibrary` is a small SwiftUI component library that currently provides a reusable, configurable button view called `BasicButton`. It targets **iOS 15+** and **macOS 12+**.
+`SwiftElements` is a small SwiftUI component library that currently provides a reusable, configurable button view called `ReusableButton`. It targets **iOS 15+** and **macOS 12+**.
 
 ### Features
 
-- **`BasicButton` SwiftUI view**
+- **`ReusableButton` SwiftUI view**
   - Configurable **title**
   - Two **styles**:
     - `.primary` – uses `buttonStyle(.borderedProminent)`
@@ -24,7 +24,7 @@
 
 #### Swift Package Manager
 
-You can add `MyLibrary` to your project using Swift Package Manager.
+You can add `SwiftElements` to your project using Swift Package Manager.
 
 1. In Xcode, go to:
    - `File` → `Add Packages…`
@@ -33,7 +33,7 @@ You can add `MyLibrary` to your project using Swift Package Manager.
 3. Choose the version rule that fits your needs, for example:
    - **Exact** `1.0.0` or
    - **Up to Next Major** from `1.0.0`
-4. Add the **`MyLibrary`** product to your app target.
+4. Add the **`SwiftElements`** product to your app target.
 
 Alternatively, in your own `Package.swift`:
 
@@ -48,7 +48,7 @@ targets: [
     .target(
         name: "YourApp",
         dependencies: [
-            .product(name: "MyLibrary", package: "SampleSwiftuiPackage")
+            .product(name: "SwiftElements", package: "SampleSwiftuiPackage")
         ]
     )
 ]
@@ -60,7 +60,7 @@ Import the module in your SwiftUI view:
 
 ```swift
 import SwiftUI
-import MyLibrary
+import SwiftElements
 ```
 
 #### Basic primary button
@@ -68,7 +68,7 @@ import MyLibrary
 ```swift
 struct ContentView: View {
     var body: some View {
-        BasicButton(title: "Continue") {
+        ReusableButton(title: "Continue") {
             // Handle tap
         }
         .padding()
@@ -81,7 +81,7 @@ struct ContentView: View {
 ```swift
 struct ContentView: View {
     var body: some View {
-        BasicButton(title: "Cancel", style: .secondary) {
+        ReusableButton(title: "Cancel", style: .secondary) {
             // Handle cancel
         }
         .padding()
@@ -94,7 +94,7 @@ struct ContentView: View {
 ```swift
 struct ContentView: View {
     var body: some View {
-        BasicButton(
+        ReusableButton(
             title: "Continue",
             accessibilityId: "continue_button"
         ) {
@@ -107,10 +107,10 @@ struct ContentView: View {
 
 ### API Reference
 
-#### `BasicButton`
+#### `ReusableButton`
 
 ```swift
-public struct BasicButton: View {
+public struct ReusableButton: View {
     public enum Style: Sendable {
         case primary
         case secondary
@@ -132,7 +132,7 @@ public struct BasicButton: View {
 
 ### Testing
 
-This package includes basic unit tests for `BasicButton`.
+This package includes basic unit tests for `ReusableButton`.
 
 To run tests from the command line:
 
@@ -142,7 +142,8 @@ swift test
 
 Or in Xcode:
 
-- Select the `MyLibrary` scheme.
+- Select the `SwiftElements` scheme.
+- Select the `SwiftElements` scheme.
 - Use `Product` → `Test` (⌘U).
 
 ### License
