@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Foundation
 
 public struct ReusableImage: View {
     public enum Source: Sendable, Hashable {
         case system(name: String)
         case asset(name: String)
+        case remote(url: URL?)
     }
 
     public enum Style: Sendable, Hashable {
@@ -77,6 +79,24 @@ public struct ReusableImage: View {
         )
     }
 
+    public init(
+        url: URL?,
+        style: Style = .original,
+        size: CGSize? = nil,
+        resizable: Bool = false,
+        aspectMode: ContentMode = .fit,
+        accessibilityId: String? = nil
+    ) {
+        self.init(
+            source: .remote(url: url),
+            style: style,
+            size: size,
+            resizable: resizable,
+            aspectMode: aspectMode,
+            accessibilityId: accessibilityId
+        )
+    }
+
     public var body: some View {
         content
             .reusableAccessibilityIdentifier(accessibilityId)
@@ -84,16 +104,84 @@ public struct ReusableImage: View {
 
     @ViewBuilder
     private var content: some View {
-        let base = image
+        switch source {
+        case .system, .asset:
+            localContent
+        case .remote(let url):
+            asyncContent(url: url)
+        }
+    }
 
-        if resizable {
-            styled(base)
-                .resizable()
-                .aspectRatio(contentMode: aspectMode)
-                .frame(width: size?.width, height: size?.height)
-        } else {
-            styled(base)
-                .frame(width: size?.width, height: size?.height)
+    @ViewBuilder
+    private var localContent: some View {
+        switch style {
+        case .original:
+            if resizable {
+                image
+                    .resizable()
+                    .aspectRatio(contentMode: aspectMode)
+                    .frame(width: size?.width, height: size?.height)
+            } else {
+                image
+                    .frame(width: size?.width, height: size?.height)
+            }
+        case .template(let foregroundColor):
+            if resizable {
+                image
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: aspectMode)
+                    .foregroundStyle(foregroundColor)
+                    .frame(width: size?.width, height: size?.height)
+            } else {
+                image
+                    .renderingMode(.template)
+                    .foregroundStyle(foregroundColor)
+                    .frame(width: size?.width, height: size?.height)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func asyncContent(url: URL?) -> some View {
+        AsyncImage(url: url) { phase in
+            switch phase {
+            case .empty:
+                ProgressView()
+                    .frame(width: size?.width, height: size?.height)
+            case .failure:
+                Image(systemName: "photo")
+                    .frame(width: size?.width, height: size?.height)
+            case .success(let loadedImage):
+                switch style {
+                case .original:
+                    if resizable {
+                        loadedImage
+                            .resizable()
+                            .aspectRatio(contentMode: aspectMode)
+                            .frame(width: size?.width, height: size?.height)
+                    } else {
+                        loadedImage
+                            .frame(width: size?.width, height: size?.height)
+                    }
+                case .template(let foregroundColor):
+                    if resizable {
+                        loadedImage
+                            .renderingMode(.template)
+                            .resizable()
+                            .aspectRatio(contentMode: aspectMode)
+                            .foregroundStyle(foregroundColor)
+                            .frame(width: size?.width, height: size?.height)
+                    } else {
+                        loadedImage
+                            .renderingMode(.template)
+                            .foregroundStyle(foregroundColor)
+                            .frame(width: size?.width, height: size?.height)
+                    }
+                }
+            @unknown default:
+                EmptyView()
+            }
         }
     }
 
@@ -103,20 +191,9 @@ public struct ReusableImage: View {
             Image(systemName: name)
         case .asset(let name):
             Image(name)
+        case .remote:
+            Image(systemName: "photo")
         }
     }
 
-    @ViewBuilder
-    private func styled(_ image: Image) -> some View {
-        switch style {
-        case .original:
-            image
-        case .template(let foregroundColor):
-            image
-                .renderingMode(.template)
-                .foregroundStyle(foregroundColor)
-        }
-    }
 }
-
-

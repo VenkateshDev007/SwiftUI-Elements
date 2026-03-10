@@ -59,14 +59,3 @@ public struct ReusableButton<Label: View>: View {
         }
     }
 }
-
-private extension View {
-    @ViewBuilder
-    func reusableAccessibilityIdentifier(_ id: String?) -> some View {
-        if let id {
-            accessibilityIdentifier(id)
-        } else {
-            self
-        }
-    }
-}
