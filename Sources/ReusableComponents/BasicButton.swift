@@ -1,12 +1,12 @@
 //
-//  BasicButton.swift
+//  ReusableButton.swift
 //
 //  Created by Polepalli, Venkatesh on 06/02/26.
 //
 
 import SwiftUI
 
-public struct BasicButton: View {
+public struct ReusableButton: View {
     public enum Style: Sendable {
         case primary
         case secondary
@@ -31,7 +31,7 @@ public struct BasicButton: View {
 
     public var body: some View {
         content
-            .basicAccessibilityIdentifier(accessibilityId)
+            .reusableAccessibilityIdentifier(accessibilityId)
     }
 
     @ViewBuilder
@@ -49,7 +49,7 @@ public struct BasicButton: View {
 
 private extension View {
     @ViewBuilder
-    func basicAccessibilityIdentifier(_ id: String?) -> some View {
+    func reusableAccessibilityIdentifier(_ id: String?) -> some View {
         if let id {
             accessibilityIdentifier(id)
         } else {
