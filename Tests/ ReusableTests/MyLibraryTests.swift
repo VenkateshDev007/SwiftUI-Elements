@@ -1,22 +1,13 @@
 import XCTest
+import SwiftUI
 @testable import SwiftElements
 
 final class SwiftElementsTests: XCTestCase {
     @MainActor
-    func testReusableButton_init_primary_buildsBody() {
-        let sut = ReusableButton(title: "Continue") {}
-        _ = sut.body
-    }
-
-    @MainActor
-    func testReusableButton_init_secondary_buildsBody() {
-        let sut = ReusableButton(title: "Cancel", style: .secondary) {}
-        _ = sut.body
-    }
-
-    @MainActor
-    func testReusableButton_accessibilityIdentifier_doesNotCrashWhenSet() {
-        let sut = ReusableButton(title: "Continue", accessibilityId: "continue_button") {}
+    func testReusableButton_labelInit_buildsBody() {
+        let sut = ReusableButton(style: .primary, accessibilityId: "label_button", action: {}) {
+            Label("Continue", systemImage: "chevron.right")
+        }
         _ = sut.body
     }
 }
