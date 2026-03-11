@@ -72,61 +72,16 @@ private extension View {
     ) -> some View {
         switch buttonStyle {
         case .primary:
-            self.buttonStyle(ReusablePrimaryButtonStyle())
+            self.buttonStyle(.borderedProminent)
         case .secondary:
-            self.buttonStyle(ReusableSecondaryButtonStyle())
+            self.buttonStyle(.bordered)
         case .destructive:
-            self.buttonStyle(ReusableDestructiveButtonStyle())
+            self.buttonStyle(.borderedProminent)
+                .tint(.red)
         case .plain:
-            self.buttonStyle(ReusablePlainButtonStyle())
+            self.buttonStyle(.plain)
         case .borderless:
-            self.buttonStyle(ReusableBorderlessButtonStyle())
+            self.buttonStyle(.borderless)
         }
-    }
-}
-
-private struct ReusablePrimaryButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Button(action: configuration.trigger) {
-            configuration.label
-        }
-        .buttonStyle(.borderedProminent)
-    }
-}
-
-private struct ReusableSecondaryButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Button(action: configuration.trigger) {
-            configuration.label
-        }
-        .buttonStyle(.bordered)
-    }
-}
-
-private struct ReusableDestructiveButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Button(action: configuration.trigger) {
-            configuration.label
-        }
-        .buttonStyle(.borderedProminent)
-        .tint(.red)
-    }
-}
-
-private struct ReusablePlainButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Button(action: configuration.trigger) {
-            configuration.label
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-private struct ReusableBorderlessButtonStyle: PrimitiveButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        Button(action: configuration.trigger) {
-            configuration.label
-        }
-        .buttonStyle(.borderless)
     }
 }
