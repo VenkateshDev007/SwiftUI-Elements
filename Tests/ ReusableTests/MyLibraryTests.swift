@@ -20,7 +20,7 @@ final class SwiftElementsTests: XCTestCase {
     @MainActor
     func testReusableTextField_buildsBody() {
         let text = Binding<String>(get: { "" }, set: { _ in })
-        let sut = ReusableTextField(title: "Name", text: text, prompt: "Enter name", accessibilityId: "name_field")
+        let sut = ReusableTextField(text: text, style: .roundedBorder, prompt: Text("Enter name"), accessibilityId: "name_field")
         _ = sut.body
     }
 

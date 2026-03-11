@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-public struct ReusableTextField<Label: View>: View {
+public struct ReusableTextField: View {
     public enum Style: Sendable, Hashable {
         case automatic
         case roundedBorder
         case plain
     }
 
+    private let title: String
     private let text: Binding<String>
     private let style: Style
     private let prompt: Text?
     private let accessibilityId: String?
-    private let label: Label
 
     public init(
         title: String,
@@ -26,26 +26,25 @@ public struct ReusableTextField<Label: View>: View {
         style: Style = .roundedBorder,
         prompt: String? = nil,
         accessibilityId: String? = nil
-    ) where Label == Text {
+    ) {
+        self.title = title
         self.text = text
         self.style = style
         self.prompt = prompt.map(Text.init)
         self.accessibilityId = accessibilityId
-        self.label = Text(title)
     }
 
     public init(
         text: Binding<String>,
         style: Style = .roundedBorder,
         prompt: Text? = nil,
-        accessibilityId: String? = nil,
-        @ViewBuilder label: () -> Label
+        accessibilityId: String? = nil
     ) {
+        self.title = ""
         self.text = text
         self.style = style
         self.prompt = prompt
         self.accessibilityId = accessibilityId
-        self.label = label()
     }
 
     public var body: some View {
@@ -55,7 +54,7 @@ public struct ReusableTextField<Label: View>: View {
 
     @ViewBuilder
     private var content: some View {
-        let field = TextField(text: text, prompt: prompt) { label }
+        let field = TextField(title, text: text, prompt: prompt)
 
         switch style {
         case .automatic:
