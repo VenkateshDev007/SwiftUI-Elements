@@ -7,11 +7,21 @@
 
 import SwiftUI
 
+public enum ReusableButtonStyle: Sendable {
+    /// Prominent filled button (borderedProminent)
+    case primary
+    /// Standard bordered button
+    case secondary
+    /// Destructive, prominent style for destructive actions
+    case destructive
+    /// Plain button style (no chrome)
+    case plain
+    /// Borderless style (e.g. for toolbar-style actions)
+    case borderless
+}
+
 public struct ReusableButton<Label: View>: View {
-    public enum Style: Sendable {
-        case primary
-        case secondary
-    }
+    public typealias Style = ReusableButtonStyle
 
     private let label: Label
     private let style: Style
@@ -43,19 +53,80 @@ public struct ReusableButton<Label: View>: View {
     }
 
     public var body: some View {
-        content
-            .reusableAccessibilityIdentifier(accessibilityId)
-    }
-
-    @ViewBuilder
-    private var content: some View {
-        switch style {
-        case .primary:
-            Button(action: action) { label }
-                .buttonStyle(.borderedProminent)
-        case .secondary:
-            Button(action: action) { label }
-                .buttonStyle(.bordered)
+        Button {
+            action()
+        } label: {
+            label
         }
+        .applyReusableButtonStyle(
+            buttonStyle: style
+        )
+        .reusableAccessibilityIdentifier(accessibilityId)
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func applyReusableButtonStyle(
+        buttonStyle: ReusableButtonStyle
+    ) -> some View {
+        switch buttonStyle {
+        case .primary:
+            self.buttonStyle(ReusablePrimaryButtonStyle())
+        case .secondary:
+            self.buttonStyle(ReusableSecondaryButtonStyle())
+        case .destructive:
+            self.buttonStyle(ReusableDestructiveButtonStyle())
+        case .plain:
+            self.buttonStyle(ReusablePlainButtonStyle())
+        case .borderless:
+            self.buttonStyle(ReusableBorderlessButtonStyle())
+        }
+    }
+}
+
+private struct ReusablePrimaryButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: configuration.trigger) {
+            configuration.label
+        }
+        .buttonStyle(.borderedProminent)
+    }
+}
+
+private struct ReusableSecondaryButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: configuration.trigger) {
+            configuration.label
+        }
+        .buttonStyle(.bordered)
+    }
+}
+
+private struct ReusableDestructiveButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: configuration.trigger) {
+            configuration.label
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(.red)
+    }
+}
+
+private struct ReusablePlainButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: configuration.trigger) {
+            configuration.label
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct ReusableBorderlessButtonStyle: PrimitiveButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: configuration.trigger) {
+            configuration.label
+        }
+        .buttonStyle(.borderless)
     }
 }

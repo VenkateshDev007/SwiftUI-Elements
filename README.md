@@ -7,9 +7,12 @@
 
 - **`ReusableButton` SwiftUI view**
   - Configurable **title**
-  - Two **styles**:
+  - Multiple **styles**:
     - `.primary` – uses `buttonStyle(.borderedProminent)`
     - `.secondary` – uses `buttonStyle(.bordered)`
+    - `.destructive` – uses `buttonStyle(.borderedProminent)` (tinted red)
+    - `.plain` – uses `buttonStyle(.plain)`
+    - `.borderless` – uses `buttonStyle(.borderless)`
   - Optional **accessibility identifier** for UI tests
   - Simple closure-based `action` handler
 - **`ReusableImage` SwiftUI view**
@@ -223,11 +226,16 @@ struct ContentView: View {
 #### `ReusableButton`
 
 ```swift
+public enum ReusableButtonStyle: Sendable {
+    case primary
+    case secondary
+    case destructive
+    case plain
+    case borderless
+}
+
 public struct ReusableButton<Label: View>: View {
-    public enum Style: Sendable {
-        case primary
-        case secondary
-    }
+    public typealias Style = ReusableButtonStyle
 
     public init(
         title: String,
@@ -246,7 +254,7 @@ public struct ReusableButton<Label: View>: View {
 ```
 
 - **`title`**: Text shown on the button.
-- **`style`**: Visual style (`.primary` or `.secondary`).
+- **`style`**: Visual style (`.primary`, `.secondary`, `.destructive`, `.plain`, `.borderless`).
 - **`accessibilityId`**: Optional `accessibilityIdentifier` applied to the underlying view.
 - **`action`**: Closure invoked when the button is tapped.
 
