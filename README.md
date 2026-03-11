@@ -13,7 +13,7 @@
   - Optional **accessibility identifier** for UI tests
   - Simple closure-based `action` handler
 - **`ReusableImage` SwiftUI view**
-  - Supports **SF Symbols** (`systemName`) and **asset images**
+  - Supports **SF Symbols** (`systemName`), **asset images**, and **remote images** (`url`) via `AsyncImage`
   - Optional **template** style (tint color)
   - Optional **fixed size** and `resizable` support
   - Optional **accessibility identifier**
@@ -149,6 +149,15 @@ struct ContentView: View {
                 size: .init(width: 24, height: 24),
                 accessibilityId: "star_icon"
             )
+
+            ReusableImage(
+                url: URL(string: "https://picsum.photos/200"),
+                size: .init(width: 80, height: 80),
+                resizable: true,
+                aspectMode: .fill,
+                accessibilityId: "remote_image"
+            )
+            .clipped()
         }
         .padding()
     }
@@ -163,9 +172,9 @@ struct ContentView: View {
 
     var body: some View {
         ReusableTextField(
-            title: "Name",
             text: $name,
-            prompt: "Enter name",
+            style: .roundedBorder,
+            prompt: Text("Enter name"),
             accessibilityId: "name_field"
         )
         .padding()
@@ -248,6 +257,7 @@ public struct ReusableImage: View {
     public enum Source: Sendable, Hashable {
         case system(name: String)
         case asset(name: String)
+        case remote(url: URL?)
     }
 
     public enum Style: Sendable, Hashable {
@@ -263,13 +273,22 @@ public struct ReusableImage: View {
         aspectMode: ContentMode = .fit,
         accessibilityId: String? = nil
     )
+
+    public init(
+        url: URL?,
+        style: Style = .original,
+        size: CGSize? = nil,
+        resizable: Bool = false,
+        aspectMode: ContentMode = .fit,
+        accessibilityId: String? = nil
+    )
 }
 ```
 
 #### `ReusableTextField`
 
 ```swift
-public struct ReusableTextField<Label: View>: View {
+public struct ReusableTextField: View {
     public enum Style: Sendable, Hashable {
         case automatic
         case roundedBorder
@@ -288,8 +307,7 @@ public struct ReusableTextField<Label: View>: View {
         text: Binding<String>,
         style: Style = .roundedBorder,
         prompt: Text? = nil,
-        accessibilityId: String? = nil,
-        @ViewBuilder label: () -> Label
+        accessibilityId: String? = nil
     )
 }
 ```
@@ -319,7 +337,7 @@ public struct ReusableSlider<Label: View>: View {
 #### `ReusableToggle`
 
 ```swift
-public struct ReusableToggle<Label: View>: View {
+public struct ReusableToggle: View {
     public init(
         title: String,
         isOn: Binding<Bool>,
@@ -328,8 +346,7 @@ public struct ReusableToggle<Label: View>: View {
 
     public init(
         isOn: Binding<Bool>,
-        accessibilityId: String? = nil,
-        @ViewBuilder label: () -> Label
+        accessibilityId: String? = nil
     )
 }
 ```
@@ -346,7 +363,6 @@ swift test
 
 Or in Xcode:
 
-- Select the `SwiftElements` scheme.
 - Select the `SwiftElements` scheme.
 - Use `Product` → `Test` (⌘U).
 
