@@ -5,9 +5,7 @@ import SwiftUI
 final class SwiftElementsTests: XCTestCase {
     @MainActor
     func testReusableButton_labelInit_buildsBody() {
-        let sut = ReusableButton(style: .primary, accessibilityId: "label_button", action: {}) {
-            Label("Continue", systemImage: "chevron.right")
-        }
+        let sut = ReusableButton(title: "Continue", style: .primary, accessibilityId: "label_button", action: {})
         _ = sut.body
     }
 
