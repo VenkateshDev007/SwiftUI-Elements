@@ -359,21 +359,6 @@ public struct ReusableToggle: View {
 }
 ```
 
-### Testing
-
-This package includes basic unit tests for the reusable SwiftUI components.
-
-To run tests from the command line:
-
-```bash
-swift test
-```
-
-Or in Xcode:
-
-- Select the `SwiftElements` scheme.
-- Use `Product` → `Test` (⌘U).
-
 ### License
 
 Specify your license here (e.g., MIT, Apache 2.0, proprietary). Update this section based on how you intend others to use this package.
