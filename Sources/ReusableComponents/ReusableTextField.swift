@@ -7,44 +7,35 @@
 
 import SwiftUI
 
-public struct ReusableTextField: View {
-    public enum Style: Sendable, Hashable {
-        case automatic
-        case roundedBorder
-        case plain
-    }
+public enum Style: Hashable, Sendable {
+    case automatic
+    case roundedBorder
+    case plain
+    case searchBar
+}
 
+public struct ReusableTextField<ClearButtonView: View>: View {
     private let title: String
     private let text: Binding<String>
     private let style: Style
     private let prompt: Text?
     private let accessibilityId: String?
+    private let clearButton: ClearButtonView?
 
     public init(
-        title: String,
+        title: String = "",
         text: Binding<String>,
         style: Style = .roundedBorder,
         prompt: String? = nil,
-        accessibilityId: String? = nil
+        accessibilityId: String? = nil,
+        clearButton: ClearButtonView? = nil
     ) {
         self.title = title
         self.text = text
         self.style = style
         self.prompt = prompt.map(Text.init)
         self.accessibilityId = accessibilityId
-    }
-
-    public init(
-        text: Binding<String>,
-        style: Style = .roundedBorder,
-        prompt: Text? = nil,
-        accessibilityId: String? = nil
-    ) {
-        self.title = ""
-        self.text = text
-        self.style = style
-        self.prompt = prompt
-        self.accessibilityId = accessibilityId
+        self.clearButton = clearButton
     }
 
     public var body: some View {
@@ -54,19 +45,43 @@ public struct ReusableTextField: View {
 
     @ViewBuilder
     private var content: some View {
-        let field = TextField(title, text: text, prompt: prompt)
-
         switch style {
         case .automatic:
-            field
+            TextField(title, text: text, prompt: prompt)
                 .textFieldStyle(.automatic)
+
         case .roundedBorder:
-            field
+            TextField(title, text: text, prompt: prompt)
                 .textFieldStyle(.roundedBorder)
+
         case .plain:
-            field
+            TextField(title, text: text, prompt: prompt)
                 .textFieldStyle(.plain)
+
+        case .searchBar:
+            HStack(spacing: 8) {
+                // Search icon
+                Image(systemName: "magnifyingglass")
+
+                // Text field
+                TextField(title, text: text, prompt: prompt)
+                    .padding(.vertical, 6)
+
+                // Clear button if text is non-empty
+                if !text.wrappedValue.isEmpty, let clearButton = clearButton {
+                    Button {
+                        text.wrappedValue = ""
+                    } label: {
+                        clearButton
+                    }
+                }
+            }
+            .padding(.horizontal, 8)
+            .overlay(
+                   RoundedRectangle(cornerRadius: 10)
+                       .stroke(Color.gray)
+               )
+         
         }
     }
 }
-
