@@ -20,7 +20,7 @@ public struct ReusableTextField<ClearButtonView: View>: View {
     private let style: Style
     private let prompt: Text?
     private let accessibilityId: String?
-    private let clearButton: ClearButtonView?
+    private let clearButton: () -> ClearButtonView
 
     public init(
         title: String = "",
@@ -28,7 +28,7 @@ public struct ReusableTextField<ClearButtonView: View>: View {
         style: Style = .roundedBorder,
         prompt: String? = nil,
         accessibilityId: String? = nil,
-        clearButton: ClearButtonView? = nil
+        @ViewBuilder clearButton: @escaping () -> ClearButtonView = { EmptyView() }
     ) {
         self.title = title
         self.text = text
@@ -60,28 +60,25 @@ public struct ReusableTextField<ClearButtonView: View>: View {
 
         case .searchBar:
             HStack(spacing: 8) {
-                // Search icon
+
                 Image(systemName: "magnifyingglass")
 
-                // Text field
                 TextField(title, text: text, prompt: prompt)
                     .padding(.vertical, 6)
 
-                // Clear button if text is non-empty
-                if !text.wrappedValue.isEmpty, let clearButton = clearButton {
+                if !text.wrappedValue.isEmpty {
                     Button {
                         text.wrappedValue = ""
                     } label: {
-                        clearButton
+                        clearButton()
                     }
                 }
             }
             .padding(.horizontal, 8)
             .overlay(
-                   RoundedRectangle(cornerRadius: 10)
-                       .stroke(Color.gray)
-               )
-         
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray)
+            )
         }
     }
 }
