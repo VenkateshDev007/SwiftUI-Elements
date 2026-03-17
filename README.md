@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/25839781/README.md)
-## SwiftElements
+## SwiftUIElements
 
 `SwiftElements` is a small SwiftUI component library that provides a set of reusable, configurable UI components (Button, Image, TextField, Slider, Toggle). It targets **iOS 15+** and **macOS 12+**.
 
@@ -44,23 +44,23 @@
 
 #### Swift Package Manager
 
-You can add `SwiftElements` to your project using Swift Package Manager.
+You can add `SwiftUIElements` to your project using Swift Package Manager.
 
 1. In Xcode, go to:
    - `File` → `Add Packages…`
 2. Enter the repository URL:
-   - `https://github.com/VenkateshDev007/SampleSwiftuiPackage.git`
+   - `https://github.com/VenkateshDev007/SwiftUI-Elements`
 3. Choose the version rule that fits your needs, for example:
    - **Exact** `1.0.0` or
    - **Up to Next Major** from `1.0.0`
-4. Add the **`SwiftElements`** product to your app target.
+4. Add the **`SwiftUIElements`** product to your app target.
 
 Alternatively, in your own `Package.swift`:
 
 ```swift
 dependencies: [
     .package(
-        url: "https://github.com/VenkateshDev007/SampleSwiftuiPackage.git",
+        url: "https://github.com/VenkateshDev007/SwiftUI-Elements",
         from: "1.0.0"
     )
 ],
@@ -68,7 +68,7 @@ targets: [
     .target(
         name: "YourApp",
         dependencies: [
-            .product(name: "SwiftElements", package: "SampleSwiftuiPackage")
+            .product(name: "SwiftUIElements", package: "SwiftUI-Elements")
         ]
     )
 ]
@@ -80,7 +80,7 @@ Import the module in your SwiftUI view:
 
 ```swift
 import SwiftUI
-import SwiftElements
+import SwiftUIElements
 ```
 
 #### Basic primary button
@@ -371,7 +371,7 @@ swift test
 
 Or in Xcode:
 
-- Select the `SwiftElements` scheme.
+- Select the `SwiftUIElements` scheme.
 - Use `Product` → `Test` (⌘U).
 
 ### License
