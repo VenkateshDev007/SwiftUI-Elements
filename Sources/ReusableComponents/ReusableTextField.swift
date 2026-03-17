@@ -12,6 +12,7 @@ public enum Style: Hashable, Sendable {
     case roundedBorder
     case plain
     case searchBar
+    case secure
 }
 
 public struct ReusableTextField<ClearButtonView: View>: View {
@@ -79,6 +80,10 @@ public struct ReusableTextField<ClearButtonView: View>: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.gray)
             )
-        }
+            
+        case .secure:
+             SecureField(title, text: text, prompt: prompt)
+                 .textFieldStyle(.roundedBorder)
+         }
     }
 }
