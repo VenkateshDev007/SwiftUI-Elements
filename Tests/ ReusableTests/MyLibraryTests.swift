@@ -1,8 +1,8 @@
 import XCTest
 import SwiftUI
-@testable import SwiftElements
+@testable import SwiftUIElements
 
-final class SwiftElementsTests: XCTestCase {
+final class SwiftUIElementsTests: XCTestCase {
     @MainActor
     func testReusableButton_labelInit_buildsBody() {
         let sut = ReusableButton(title: "Continue", style: .primary, accessibilityId: "label_button", action: {})
