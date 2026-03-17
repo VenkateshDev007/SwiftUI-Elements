@@ -8,6 +8,7 @@
 import SwiftUI
 
 public struct ReusableProgressView: View {
+    public init() {}
     public var body: some View {
         ProgressView()
     }
