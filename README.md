@@ -373,7 +373,3 @@ Or in Xcode:
 
 - Select the `SwiftUIElements` scheme.
 - Use `Product` → `Test` (⌘U).
-
-### License
-
-Specify your license here (e.g., MIT, Apache 2.0, proprietary). Update this section based on how you intend others to use this package.
