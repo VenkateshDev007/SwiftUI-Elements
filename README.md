@@ -1,7 +1,7 @@
 [README.md](https://github.com/user-attachments/files/25839781/README.md)
 ## SwiftUIElements
 
-`SwiftElements` is a small SwiftUI component library that provides a set of reusable, configurable UI components (Button, Image, TextField, Slider, Toggle). It targets **iOS 15+** and **macOS 12+**.
+`SwiftUIElements` is a small SwiftUI component library that provides a set of reusable, configurable UI components (Button, Image, TextField, Slider, Toggle). It targets **iOS 15+** and **macOS 12+**.
 
 ### Features
 
