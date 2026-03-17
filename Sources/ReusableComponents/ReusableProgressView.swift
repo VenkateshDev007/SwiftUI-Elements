@@ -9,6 +9,6 @@ import SwiftUI
 
 struct ReusableProgressView: View {
     var body: some View {
-        SwiftUI.ProgressView()
+        ProgressView()
     }
 }
