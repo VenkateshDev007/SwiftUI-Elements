@@ -58,30 +58,33 @@ public struct ReusableButton<Label: View>: View {
         } label: {
             label
         }
-        .applyReusableButtonStyle(
-            buttonStyle: style
-        )
+        .modifier(ReusableButtonStyleModifier(style: style))
         .reusableAccessibilityIdentifier(accessibilityId)
     }
 }
 
-private extension View {
-    @ViewBuilder
-    func applyReusableButtonStyle(
-        buttonStyle: ReusableButtonStyle
-    ) -> some View {
-        switch buttonStyle {
+struct ReusableButtonStyleModifier: ViewModifier {
+    
+    let style: ReusableButtonStyle
+    
+    func body(content: Content) -> some View {
+        switch style {
         case .primary:
-            self.buttonStyle(.borderedProminent)
+            content.buttonStyle(.borderedProminent)
+            
         case .secondary:
-            self.buttonStyle(.bordered)
+            content.buttonStyle(.bordered)
+            
         case .destructive:
-            self.buttonStyle(.borderedProminent)
+            content
+                .buttonStyle(.borderedProminent)
                 .tint(.red)
+            
         case .plain:
-            self.buttonStyle(.plain)
+            content.buttonStyle(.plain)
+            
         case .borderless:
-            self.buttonStyle(.borderless)
+            content.buttonStyle(.borderless)
         }
     }
 }

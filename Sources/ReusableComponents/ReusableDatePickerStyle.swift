@@ -73,33 +73,32 @@ public struct ReusableDatePicker: View {
                 )
             }
         }
-        .applyReusableDatePickerStyle(style)
+        .modifier(ReusableDatePickerStyleModifier(style: style))
         .tint(tint)
         .disabled(isDisabled)
         .reusableAccessibilityIdentifier(accessibilityId)
     }
 }
 
-// MARK: - Style Extension
 
-private extension View {
+struct ReusableDatePickerStyleModifier: ViewModifier {
     
-    @ViewBuilder
-    func applyReusableDatePickerStyle(
-        _ style: ReusableDatePickerStyle
-    ) -> some View {
+    let style: ReusableDatePickerStyle
+    
+    func body(content: Content) -> some View {
         switch style {
         case .compact:
-            self.datePickerStyle(.compact)
+            content.datePickerStyle(.compact)
             
         case .graphical:
-            self.datePickerStyle(.graphical)
+            content.datePickerStyle(.graphical)
             
         case .wheel:
-            self.datePickerStyle(.wheel)
+            content.datePickerStyle(.wheel)
             
         case .plain:
-            self.datePickerStyle(.compact)
+            content
+                .datePickerStyle(.compact)
                 .labelsHidden()
         }
     }
