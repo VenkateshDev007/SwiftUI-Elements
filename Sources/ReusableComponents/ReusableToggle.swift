@@ -59,29 +59,31 @@ public struct ReusableToggle: View {
     
     public var body: some View {
         Toggle(title, isOn: isOn)
-            .applyReusableToggleStyle(style, tintColor: tintColor)
+            .modifier(ReusableToggleStyleModifier(style: style, tintColor: tintColor))
             .reusableAccessibilityIdentifier(accessibilityId)
     }
 }
 
 // MARK: - Toggle Style Modifier
 
-private extension View {
+struct ReusableToggleStyleModifier: ViewModifier {
     
-    @ViewBuilder
-    func applyReusableToggleStyle(_ style: ReusableToggleStyleType, tintColor: Color?) -> some View {
+    let style: ReusableToggleStyleType
+    let tintColor: Color?
+    
+    func body(content: Content) -> some View {
         switch style {
         case .default:
-            self.toggleStyle(DefaultToggleStyle())
+            content.toggleStyle(DefaultToggleStyle())
             
         case .switchStyle:
-            self.toggleStyle(SwitchToggleStyle(tint: tintColor ?? .blue))
+            content.toggleStyle(SwitchToggleStyle(tint: tintColor ?? .blue))
             
         case .checkbox:
-            self.toggleStyle(CheckToggleStyle()) // <- custom checkbox style
+            content.toggleStyle(CheckToggleStyle()) // custom checkbox style
             
         case .buttonToggle:
-            self.toggleStyle(.button)
+            content.toggleStyle(.button)
         }
     }
 }
