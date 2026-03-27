@@ -121,7 +121,7 @@ public struct ReusableProgressView<Label: View>: View {
     
     public var body: some View {
         progressContent
-            .applyReusableProgressStyle(style: style, tint: tint)
+            .modifier(ReusableProgressStyleModifier(style: style, tint: tint))
             .reusableAccessibilityIdentifier(accessibilityId)
     }
 }
@@ -146,28 +146,27 @@ private extension ReusableProgressView {
     }
 }
 
-// MARK: - Style Modifier
+// MARK: - Progress view Style Modifier
 
-private extension View {
+struct ReusableProgressStyleModifier: ViewModifier {
     
-    @ViewBuilder
-    func applyReusableProgressStyle(
-        style: ReusableProgressStyle,
-        tint: Color?
-    ) -> some View {
+    let style: ReusableProgressStyle
+    let tint: Color?
+    
+    func body(content: Content) -> some View {
         switch style {
         case .linear:
-            self
+            content
                 .progressViewStyle(.linear)
                 .tint(tint)
             
         case .circular:
-            self
+            content
                 .progressViewStyle(.circular)
                 .tint(tint)
             
         case let .circularProgress(lineWidth):
-            self
+            content
                 .progressViewStyle(
                     CustomCircularProgressViewStyle(color: tint ?? .blue, lineWidth: lineWidth)
                 )

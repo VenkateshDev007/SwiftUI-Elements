@@ -58,24 +58,30 @@ public struct ReusablePicker<SelectionValue: Hashable, Content: View, Label: Vie
         Picker(selection: selection, label: label) {
             content
         }
-        .applyReusablePickerStyle(style)
+        .modifier(ReusablePickerStyleModifier(style: style))
         .reusableAccessibilityIdentifier(accessibilityId)
     }
 }
 
-// MARK: - Style Applier
-private extension View {
-    @ViewBuilder
-    func applyReusablePickerStyle(_ style: ReusablePickerStyle) -> some View {
+// MARK: - Picker view Style Modifier
+
+struct ReusablePickerStyleModifier: ViewModifier {
+    
+    let style: ReusablePickerStyle
+    
+    func body(content: Content) -> some View {
         switch style {
         case .default:
-            self.pickerStyle(.automatic)
+            content.pickerStyle(.automatic)
+            
         case .segmented:
-            self.pickerStyle(.segmented)
+            content.pickerStyle(.segmented)
+            
         case .wheel:
-            self.pickerStyle(.wheel)
+            content.pickerStyle(.wheel)
+            
         case .menu:
-            self.pickerStyle(.menu)
+            content.pickerStyle(.menu)
         }
     }
 }
