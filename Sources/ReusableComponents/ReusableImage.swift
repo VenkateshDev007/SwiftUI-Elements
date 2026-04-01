@@ -43,58 +43,28 @@ public struct ReusableImage: View {
         self.accessibilityId = accessibilityId
     }
 
-    public init(
-        systemName: String,
-        style: Style = .original,
-        size: CGSize? = nil,
-        resizable: Bool = false,
-        aspectMode: ContentMode = .fit,
-        accessibilityId: String? = nil
-    ) {
-        self.init(
-            source: .system(name: systemName),
-            style: style,
-            size: size,
-            resizable: resizable,
-            aspectMode: aspectMode,
-            accessibilityId: accessibilityId
-        )
+    public init(systemName: String, style: Style = .original, size: CGSize? = nil,
+                resizable: Bool = false, aspectMode: ContentMode = .fit,
+                accessibilityId: String? = nil) {
+        self.init(source: .system(name: systemName), style: style,
+                  size: size, resizable: resizable,
+                  aspectMode: aspectMode, accessibilityId: accessibilityId)
     }
 
-    public init(
-        assetName: String,
-        style: Style = .original,
-        size: CGSize? = nil,
-        resizable: Bool = false,
-        aspectMode: ContentMode = .fit,
-        accessibilityId: String? = nil
-    ) {
-        self.init(
-            source: .asset(name: assetName),
-            style: style,
-            size: size,
-            resizable: resizable,
-            aspectMode: aspectMode,
-            accessibilityId: accessibilityId
-        )
+    public init(assetName: String, style: Style = .original, size: CGSize? = nil,
+                resizable: Bool = false, aspectMode: ContentMode = .fit,
+                accessibilityId: String? = nil) {
+        self.init(source: .asset(name: assetName), style: style,
+                  size: size, resizable: resizable,
+                  aspectMode: aspectMode, accessibilityId: accessibilityId)
     }
 
-    public init(
-        url: URL?,
-        style: Style = .original,
-        size: CGSize? = nil,
-        resizable: Bool = false,
-        aspectMode: ContentMode = .fit,
-        accessibilityId: String? = nil
-    ) {
-        self.init(
-            source: .remote(url: url),
-            style: style,
-            size: size,
-            resizable: resizable,
-            aspectMode: aspectMode,
-            accessibilityId: accessibilityId
-        )
+    public init(url: URL?, style: Style = .original, size: CGSize? = nil,
+                resizable: Bool = false, aspectMode: ContentMode = .fit,
+                accessibilityId: String? = nil) {
+        self.init(source: .remote(url: url), style: style,
+                  size: size, resizable: resizable,
+                  aspectMode: aspectMode, accessibilityId: accessibilityId)
     }
 
     public var body: some View {
@@ -108,7 +78,13 @@ public struct ReusableImage: View {
         case .system, .asset:
             localContent
         case .remote(let url):
-            asyncContent(url: url)
+            AsyncRemoteImage(
+                url: url,
+                style: style,
+                size: size,
+                resizable: resizable,
+                aspectMode: aspectMode
+            )
         }
     }
 
@@ -117,33 +93,45 @@ public struct ReusableImage: View {
         switch style {
         case .original:
             if resizable {
-                image
-                    .resizable()
+                image.resizable()
                     .aspectRatio(contentMode: aspectMode)
                     .frame(width: size?.width, height: size?.height)
             } else {
-                image
-                    .frame(width: size?.width, height: size?.height)
+                image.frame(width: size?.width, height: size?.height)
             }
         case .template(let foregroundColor):
             if resizable {
-                image
-                    .renderingMode(.template)
+                image.renderingMode(.template)
                     .resizable()
                     .aspectRatio(contentMode: aspectMode)
                     .foregroundStyle(foregroundColor)
                     .frame(width: size?.width, height: size?.height)
             } else {
-                image
-                    .renderingMode(.template)
+                image.renderingMode(.template)
                     .foregroundStyle(foregroundColor)
                     .frame(width: size?.width, height: size?.height)
             }
         }
     }
 
-    @ViewBuilder
-    private func asyncContent(url: URL?) -> some View {
+    private var image: Image {
+        switch source {
+        case .system(let name): Image(systemName: name)
+        case .asset(let name): Image(name)
+        case .remote: Image(systemName: "photo")
+        }
+    }
+}
+
+// MARK: - Dedicated Async Remote Image Struct
+struct AsyncRemoteImage: View {
+    let url: URL?
+    let style: ReusableImage.Style
+    let size: CGSize?
+    let resizable: Bool
+    let aspectMode: ContentMode
+
+    var body: some View {
         AsyncImage(url: url) { phase in
             switch phase {
             case .empty:
@@ -156,25 +144,21 @@ public struct ReusableImage: View {
                 switch style {
                 case .original:
                     if resizable {
-                        loadedImage
-                            .resizable()
+                        loadedImage.resizable()
                             .aspectRatio(contentMode: aspectMode)
                             .frame(width: size?.width, height: size?.height)
                     } else {
-                        loadedImage
-                            .frame(width: size?.width, height: size?.height)
+                        loadedImage.frame(width: size?.width, height: size?.height)
                     }
                 case .template(let foregroundColor):
                     if resizable {
-                        loadedImage
-                            .renderingMode(.template)
+                        loadedImage.renderingMode(.template)
                             .resizable()
                             .aspectRatio(contentMode: aspectMode)
                             .foregroundStyle(foregroundColor)
                             .frame(width: size?.width, height: size?.height)
                     } else {
-                        loadedImage
-                            .renderingMode(.template)
+                        loadedImage.renderingMode(.template)
                             .foregroundStyle(foregroundColor)
                             .frame(width: size?.width, height: size?.height)
                     }
@@ -184,16 +168,4 @@ public struct ReusableImage: View {
             }
         }
     }
-
-    private var image: Image {
-        switch source {
-        case .system(let name):
-            Image(systemName: name)
-        case .asset(let name):
-            Image(name)
-        case .remote:
-            Image(systemName: "photo")
-        }
-    }
-
 }
