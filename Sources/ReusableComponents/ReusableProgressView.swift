@@ -124,11 +124,8 @@ public struct ReusableProgressView<Label: View>: View {
             .modifier(ReusableProgressStyleModifier(style: style, tint: tint))
             .reusableAccessibilityIdentifier(accessibilityId)
     }
-}
-
-// MARK: - Internal Rendering
-
-private extension ReusableProgressView {
+    
+    // MARK: - Internal Rendering
     
     @ViewBuilder
     var progressContent: some View {
@@ -145,7 +142,6 @@ private extension ReusableProgressView {
         }
     }
 }
-
 // MARK: - Progress view Style Modifier
 
 struct ReusableProgressStyleModifier: ViewModifier {
