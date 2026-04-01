@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct ReusableSlider<Label: View>: View {
+public struct ReusableSlider: View {
     private let value: Binding<Double>
     private let range: ClosedRange<Double>
     private let step: Double?
